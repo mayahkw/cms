@@ -1,0 +1,30 @@
+{
+  "name": "mayahkw/cms",
+  "description": "Gestor de contenido",
+  "authors": [
+    {
+      "name": "Mayahkw",
+      "email": "mayahkw@gmail.com",
+      "homepage": "https://mayahkw.site"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mayahkw\\CMS\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Mayahkw\\CMS\\CmsServiceProvider"
+      ]
+    }
+  }
+}
