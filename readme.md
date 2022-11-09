@@ -12,7 +12,7 @@ Modulo de Gestion de contenido CMS
 Agregar a composer.json
 
 ```dotenv
-"mayahkw/cms": "^v0.007"
+"mayahkw/cms": "*"
 ```
 
 ```dotenv
@@ -27,10 +27,11 @@ Despues de instalado abrir `config/app.php` y agregar el service provider.
 
 ```php
 'providers' => [
-    Mayahkw\LaravelGmail\LaravelGmailServiceProvider::class,
+    Mayahkw\CMS\CmsServiceProvider::class,
 ]
 ```
 
+<!--
 Ahora agregue el alias.
 
 ```php
@@ -38,18 +39,9 @@ Ahora agregue el alias.
     'LaravelGmail' => Mayahkw\LaravelGmail\Facade\LaravelGmail::class,
 ]
 ```
+-->
 
 # Configuración
 
-Sólo tienes que establecer las siguientes variables en tu archivo .env:
-
-```dotenv
-GOOGLE_PROJECT_ID=
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_REDIRECT_URI=
-GOOGLE_ALLOW_MULTIPLE_CREDENTIALS
-GOOGLE_ALLOW_JSON_ENCRYPT
-```
-
+Sólo tienes que eliminar la ruta "/" para que el sistema tome el control de la pagina de inicio
 
