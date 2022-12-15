@@ -10,7 +10,7 @@ return new class extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $tableName = 'cms_blocks_scripts';
+    public $tableName = 'my_cms_blocks_scripts';
 
     /**
      * Run the migrations.
@@ -25,13 +25,14 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned()->index();
             $table->bigInteger('block_id')->unsigned()->index();
             $table->bigInteger('script_id')->unsigned()->index();
+            $table->bigInteger('parent_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('script_id')->references('id')->on('cms_scripts')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('block_id')->references('id')->on('cms_blocks')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('script_id')->references('id')->on('my_cms_scripts')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('block_id')->references('id')->on('my_cms_blocks')->onDelete('no action')->onUpdate('no action');
         });
     }
 

@@ -13,7 +13,9 @@ class CmsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('mycms', function () {
+            return new MyCmsClass(['id' => 1]);
+        });
     }
 
     /**
@@ -23,8 +25,15 @@ class CmsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__ . '/routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-        $this->loadViewsFrom(__DIR__ . '/resources/views', 'courier');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'my_admin');
+
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/my_admin')
+        ], 'my_admin_cms_views');
+
+        $this->publishes([
+            __DIR__ . '/../resources/js/CMS' => resource_path('js/Pages/My/Cms')
+        ], 'my_admin_cms_vue');
     }
 }

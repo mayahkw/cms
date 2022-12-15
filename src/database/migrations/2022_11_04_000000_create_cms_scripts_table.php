@@ -4,6 +4,7 @@ use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Mayahkw\CMS\database\seeders\AdminMenuSeeder;
 use Mayahkw\CMS\database\seeders\ScriptSeeder;
 
 return new class extends Migration
@@ -12,7 +13,7 @@ return new class extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $tableName = 'cms_scripts';
+    public $tableName = 'my_cms_scripts';
 
     /**
      * Run the migrations.
@@ -48,6 +49,9 @@ return new class extends Migration
         }
 
         $seeder = new ScriptSeeder();
+        $seeder->run();
+
+        $seeder = new AdminMenuSeeder();
         $seeder->run();
     }
 

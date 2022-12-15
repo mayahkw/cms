@@ -43,6 +43,6 @@ class ScriptSeeder extends Seeder
             ],
         ];
 
-        DB::table('cms_scripts')->insert($scripts);
+        DB::table('my_cms_scripts')->insert($scripts);
     }
 }

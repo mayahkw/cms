@@ -32,6 +32,6 @@ class PathLangBlockSeeder extends Seeder
             ],
         ];
 
-        DB::table('cms_paths_langs_blocks')->insert($paths);
+        DB::table('my_cms_paths_langs_blocks')->insert($paths);
     }
 }

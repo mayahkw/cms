@@ -26,6 +26,6 @@ class ThemeScriptSeeder extends Seeder
             ],
         ];
 
-        DB::table('cms_themes_scripts')->insert($themes);
+        DB::table('my_cms_themes_scripts')->insert($themes);
     }
 }

@@ -28,8 +28,17 @@ class ThemeSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                'user_id' => 1,
+                'lang' => 'en_us',
+                'name' => 'default',
+                'description' => 'Tema default de inicio para la pagina web',
+                'active' => 1,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ];
 
-        DB::table('cms_themes')->insert($themes);
+        DB::table('my_cms_themes')->insert($themes);
     }
 }

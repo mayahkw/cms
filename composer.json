@@ -13,18 +13,28 @@
     "php": ">=7.2"
   },
   "require-dev": {
-    "phpunit/phpunit": "^8.5"
+    "phpunit/phpunit": "^8.5",
+    "orchestra/testbench": "*"
   },
   "autoload": {
     "psr-4": {
       "Mayahkw\\CMS\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Mayahkw\\Admin\\Tests\\": "tests/"
+    }
+  },
   "extra": {
     "laravel": {
       "providers": [
-        "Mayahkw\\CMS\\CmsServiceProvider"
-      ]
+        "Mayahkw\\CMS\\CmsServiceProvider",
+        "Mayahkw\\CMS\\RouteServiceProvider"
+      ],
+      "aliases": {
+        "MyCms": "Mayahkw\\CMS\\Facades\\MyCms"
+      }
     }
   }
 }

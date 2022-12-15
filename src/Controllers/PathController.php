@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\URL;
+use Mayahkw\Admin\Facades\MyAdmin;
 use Mayahkw\CMS\Models\CmsPath;
 use Mayahkw\CMS\Models\CmsPathLang;
 
@@ -18,36 +18,58 @@ class PathController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public static function index($use)
+    public static function index()
     {
-        // Cargar lista de rutas
-        if ($use == 'routes') {
-            if (Schema::hasTable('cms_paths')) {
-                // Cargar las rutas
-                $paths = CmsPath::where('active', 1)->get();
-                if (count($paths) > 0) {
-                    foreach ($paths as $path) {
-                        $path->langs;
-                        if (is_null($path->diabled_at) and is_null($path->deleted_at)) {
-                            foreach ($path->langs as $lang) {
-                                Route::get($path->home ? ($path->lang === $lang->lang ? '/' : $lang->full_path) : $lang->full_path, [PathController::class, 'show'])->name('id_' . $lang->id);
-                            }
-                        } else {
-                            if (!is_null($path->public_at) and Carbon::parse($path->public_at) >= Carbon::now() and (is_null($path->deleted_at) or Carbon::parse($path->deleted_at) <= Carbon::now())) {
+        $paths = [];
+        if (Schema::hasTable('my_cms_paths')) {
+            $paths = CmsPath::where('alias', 'like', '%' . request()->search . '%')->paginate(15);
+            foreach ($paths as $path) {
+                foreach ($path->langs as $lang) {
+                    /* if (!is_null($lang->theme)) {
+                        $lang->theme->scripts;
+                        $lang->theme->blocks;
+                    }*/
+                    foreach ($lang->blocks as $dataB) {
+                        $dataB->block->scripts;
+                    }
+                }
+                $path->theme;
+            }
+        }
+
+        if (Route::currentRouteName() == 'api_my_admin.cms.paths.index') {
+            // Cargar lista de rutas
+            if (request()->use == 'routes') {
+                if (Schema::hasTable('my_cms_paths')) {
+                    // Cargar las rutas
+                    $paths = CmsPath::where('active', 1)->get();
+                    if (count($paths) > 0) {
+                        foreach ($paths as $path) {
+                            $path->langs;
+                            if (is_null($path->diabled_at) and is_null($path->deleted_at)) {
                                 foreach ($path->langs as $lang) {
                                     Route::get($path->home ? ($path->lang === $lang->lang ? '/' : $lang->full_path) : $lang->full_path, [PathController::class, 'show'])->name('id_' . $lang->id);
+                                }
+                            } else {
+                                if (!is_null($path->public_at) and Carbon::parse($path->public_at) >= Carbon::now() and (is_null($path->deleted_at) or Carbon::parse($path->deleted_at) <= Carbon::now())) {
+                                    foreach ($path->langs as $lang) {
+                                        Route::get($path->home ? ($path->lang === $lang->lang ? '/' : $lang->full_path) : $lang->full_path, [PathController::class, 'show'])->name('id_' . $lang->id);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+
+            // Site Map XML
+            if (request()->use == 'sitemap') {
+            }
+
+            return $paths;
         }
 
-        // Site Map XML
-        if ($use == 'sitemap') {
-            
-        }
+        return MyAdmin::page();
     }
 
     /**

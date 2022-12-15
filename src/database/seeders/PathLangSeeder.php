@@ -22,6 +22,7 @@ class PathLangSeeder extends Seeder
             [
                 'user_id' => 1,
                 'path_id' => 1,
+                'theme_id' => 1,
                 'lang' => 'es_mx',
                 'path' => '/',
                 'full_path' => '/es_mx',
@@ -32,6 +33,7 @@ class PathLangSeeder extends Seeder
             [
                 'user_id' => 1,
                 'path_id' => 1,
+                'theme_id' => 2,
                 'lang' => 'en_us',
                 'path' => '/',
                 'full_path' => '/en_us',
@@ -42,6 +44,7 @@ class PathLangSeeder extends Seeder
             [
                 'user_id' => 1,
                 'path_id' => 2,
+                'theme_id' => 1,
                 'lang' => 'es_mx',
                 'path' => '/demo',
                 'full_path' => '/es_mx/demo',
@@ -52,6 +55,7 @@ class PathLangSeeder extends Seeder
             [
                 'user_id' => 1,
                 'path_id' => 2,
+                'theme_id' => 2,
                 'lang' => 'en_us',
                 'path' => '/demo',
                 'full_path' => '/en_us/demo',
@@ -61,6 +65,6 @@ class PathLangSeeder extends Seeder
             ],
         ];
 
-        DB::table('cms_paths_langs')->insert($paths);
+        DB::table('my_cms_paths_langs')->insert($paths);
     }
 }

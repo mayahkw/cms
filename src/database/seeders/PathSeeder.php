@@ -21,7 +21,6 @@ class PathSeeder extends Seeder
         $paths = [
             [
                 'user_id' => 1,
-                'theme_id' => 1,
                 'domain' => null,
                 'lang' => 'es_mx',
                 'alias' => 'Home',
@@ -35,7 +34,6 @@ class PathSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'theme_id' => 1,
                 'domain' => null,
                 'lang' => 'es_mx',
                 'alias' => 'Demo',
@@ -49,6 +47,6 @@ class PathSeeder extends Seeder
             ],
         ];
 
-        DB::table('cms_paths')->insert($paths);
+        DB::table('my_cms_paths')->insert($paths);
     }
 }

@@ -11,7 +11,7 @@ return new class extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $tableName = 'cms_blocks';
+    public $tableName = 'my_cms_blocks';
 
     /**
      * Run the migrations.
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->longText('options')->nullable();
             $table->longText('operators')->nullable();
-            $table->longText('value');
+            $table->longText('value')->nullable();
             $table->boolean('active')->default('1')->comment(' El bloque esta activo');
             $table->softDeletes();
             $table->timestamps();

@@ -9,10 +9,20 @@ class CmsTheme extends Model
 {
     use HasFactory;
 
-    protected $table = "cms_themes";
+    protected $table = "my_cms_themes";
 
-    public function page()
+    public function langs()
     {
-        return $this->belongsTo(CmsPath::class, 'path_id');
+        return $this->hasMany(CmsPathLang::class, 'theme_id');
+    }
+
+    public function blocks()
+    {
+        return $this->hasMany(CmsThemeBlock::class, 'theme_id')->where('active', 1)->where('parent_id', null);
+    }
+
+    public function scripts()
+    {
+        return $this->hasMany(CmsThemeScript::class, 'theme_id')->where('active', 1);
     }
 }
