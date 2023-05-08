@@ -75,6 +75,7 @@
                                     </v-row>
                                 </v-card-text>
                             </v-card>
+
                             <v-card
                                 v-if="
                                     tab === 'options' &&
@@ -108,6 +109,46 @@
                                     </v-row>
                                 </v-card-text>
                             </v-card>
+
+                            <v-card
+                                v-if="
+                                    tab === 'options' &&
+                                    block.options.options && block.options.options.length > 0
+                                "
+                            >
+                                <v-card-title primary-title>
+                                    Options
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-row dense>
+                                        <v-col
+                                            cols="12"
+                                            v-for="(options, i) in block.options
+                                                .options"
+                                            :key="i"
+                                        >
+                                            <v-text-field
+                                                v-if="options.type === 'text'"
+                                                v-model="options.default"
+                                                :label="options.name"
+                                            ></v-text-field>
+
+                                            <v-switch v-if="options.type === 'switch'"
+                                                :items="options.values"
+                                                v-model="options.default"
+                                                :label="options.name"></v-switch>
+
+                                            <v-select
+                                                v-if="options.type === 'select'"
+                                                :items="options.values"
+                                                v-model="options.default"
+                                                :label="options.name"
+                                            ></v-select>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
+                            </v-card>
+
                             <v-card v-if="tab === 'content'">
                                 <v-card-title primary-title>
                                     Content
@@ -119,17 +160,25 @@
                                     ></TitleForm>
 
                                     <ImgForm
-                                        v-if="block.block.type === 'img'"
+                                        v-else-if="block.block.type === 'img'"
                                         :block="block"
                                     ></ImgForm>
 
                                     <CarouselForm
-                                        v-if="block.block.type === 'carousel'"
+                                        v-else-if="block.block.type === 'carousel'"
                                         :block="block"
                                     ></CarouselForm>
+
+                                    <ContentForm
+                                        v-else-if="block.block.type === 'content'"
+                                        :block="block"
+                                    ></ContentForm>
+
+                                    <div v-else>{{block.block.type}} sin form</div>
                                 </v-card-text>
                             </v-card>
                         </v-card-text>
+
                         <v-card-actions>
                             <v-btn
                                 color="primary"
@@ -151,14 +200,20 @@
         ></Title>
 
         <Img
-            v-if="block.block.type === 'img'"
+            v-else-if="block.block.type === 'img'"
             :block="block"
         ></Img>
 
         <Carousel
-            v-if="block.block.type === 'carousel'"
+            v-else-if="block.block.type === 'carousel'"
             :block="block"
         ></Carousel>
+
+        <Content
+            v-else-if="block.block.type === 'content'"
+            :block="block"
+        ></Content>
+
 
         <!--
 				-->
@@ -175,7 +230,7 @@
             :nivel="nivel + 1"
             :showPreview="showPreview"
             :block="child"
-        ></Constructor>
+        > </Constructor>
 				</div>
 </template>
 
@@ -186,12 +241,14 @@ import Title from "@/Pages/My/Cms/Components/Types/Preview/Title.vue";
 import TitleForm from "@/Pages/My/Cms/Components/Types/Forms/Title.vue";
 import Img from "@/Pages/My/Cms/Components/Types/Preview/Img.vue";
 import ImgForm from "@/Pages/My/Cms/Components/Types/Forms/Img.vue";
+import Content from "@/Pages/My/Cms/Components/Types/Preview/Content.vue";
+import ContentForm from "@/Pages/My/Cms/Components/Types/Forms/Content.vue";
 import Carousel from "@/Pages/My/Cms/Components/Types/Preview/Carousel.vue";
 import CarouselForm from "@/Pages/My/Cms/Components/Types/Forms/Carousel.vue";
 
 export default {
     name: "ConstructorNode",
-    components: { Title, TitleForm, Img, ImgForm, Carousel, CarouselForm },
+    components: { Title, TitleForm, Img, ImgForm, Carousel, CarouselForm, Content, ContentForm },
     setup() {
         const myAdmin = useMyAdminStore();
         const myCms = useMyCmsStore();
