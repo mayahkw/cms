@@ -31,9 +31,11 @@ return new class extends Migration
             $table->float('priority')->nullable()->comment('Prioridad de la pagina para sitemap del 0 al 1');
             $table->tinyInteger('index')->nullable()->default('1')->comment('Aparece en sitemap');
             $table->boolean('home')->nullable()->default(0)->comment('Estblecer pagina de inicio');
-            $table->boolean('active')->nullable()->default('1')->comment('La pagina esta activa o no');
+            $table->boolean('program_public')->default('0')->comment('La pagina esta programada para publicarse');
             $table->dateTime('public_at')->nullable()->comment('Programacion de fecha de publicacion de la URL');
+            $table->boolean('program_disabled')->default('0')->comment('La pagina esta programada para retirce de la publicacion');
             $table->dateTime('disabled_at')->nullable()->comment('Programacion de fecha de baja de contenido');
+            $table->boolean('active')->nullable()->default('1')->comment('La pagina esta activa o no');
             $table->softDeletes();
             $table->timestamps();
 

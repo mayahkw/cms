@@ -30,6 +30,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('my_admin')
                 ->namespace('Mayahkw\CMS\Controllers')
                 ->group(__DIR__ .  '/../routes/web.php');
+
+            Route::middleware(['web'])
+                ->namespace('Mayahkw\CMS\Controllers')
+                ->group(__DIR__ .  '/../routes/cms.php');
         });
     }
 

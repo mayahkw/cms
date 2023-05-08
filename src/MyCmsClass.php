@@ -2,7 +2,7 @@
 
 namespace Mayahkw\CMS;
 
-
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Mayahkw\CMS\Models\CmsTheme;
 use Mayahkw\CMS\Models\CmsThemeBlock;
@@ -17,9 +17,9 @@ class MyCmsClass
     }
 
 
-    public function page($data = [])
+    public function page($data, $lay = 'My/Admin/Components/Layout')
     {
-        return Inertia::render('My/Admin/Components/Layout', $data);
+        return Inertia::render($lay, $data);
     }
 
     public function getTheme($theme)
@@ -29,6 +29,20 @@ class MyCmsClass
         $theme->blocks = $this->getBlocks($theme->id, null);
         // dd($blocks);
         return $theme;
+    }
+
+
+    public function checkClass($class)
+    {
+        $rcl = '';
+
+        foreach ($class as $c) {
+            // dd(gettype($c->default));
+            if (gettype($c->default) == 'string') {
+                $rcl = $rcl . ' ' . $c->default;
+            }
+        }
+        return $rcl;
     }
 
     public function getBlocks($theme, $nivel)

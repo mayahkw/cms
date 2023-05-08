@@ -26,6 +26,7 @@ return new class extends Migration
             $table->bigInteger('user_id')->nullable()->unsigned()->index();
             $table->string('lang', 5)->nullable()->comment('Idioma por default del tema');
             $table->string('name', 45)->comment('Nombre del tema');
+            $table->string('path', 45)->comment('Base de url')->default('/');
             $table->longText('description');
             $table->boolean('active')->default('1');
             $table->softDeletes();

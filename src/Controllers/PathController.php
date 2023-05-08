@@ -5,11 +5,15 @@ namespace Mayahkw\CMS\Controllers;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
+use Inertia\Inertia;
 use Mayahkw\Admin\Facades\MyAdmin;
+use Mayahkw\CMS\Facades\MyCms;
 use Mayahkw\CMS\Models\CmsPath;
 use Mayahkw\CMS\Models\CmsPathLang;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class PathController extends Controller
 {
@@ -25,6 +29,8 @@ class PathController extends Controller
             $paths = CmsPath::where('alias', 'like', '%' . request()->search . '%')->paginate(15);
             foreach ($paths as $path) {
                 foreach ($path->langs as $lang) {
+                    $path->index = $path->index == 1 ? true : false;
+                    $path->home = $path->home == 1 ? true : false;
                     /* if (!is_null($lang->theme)) {
                         $lang->theme->scripts;
                         $lang->theme->blocks;
@@ -33,7 +39,8 @@ class PathController extends Controller
                         $dataB->block->scripts;
                     }
                 }
-                $path->theme;
+                $path->public_at = ($path->public_at != null ? Carbon::parse($path->public_at)->format('d-m-Y H:m') : null);
+                $path->disabled_at = ($path->disabled_at != null ? Carbon::parse($path->disabled_at)->format('d-m-Y H:m') : null);
             }
         }
 
@@ -81,11 +88,36 @@ class PathController extends Controller
     public function show()
     {
         $id = ((int) substr(Route::currentRouteName(), 3));
-        $lang = CmsPathLang::find($id);
-        $lang->page->theme;
-        $lang->page->langs;
+        $view = CmsPathLang::find($id);
+        $view->page;
+        $view->theme;
+        $view->page->langs;
 
-        return $lang;
+        $view->render = MyCms::getTheme($view->theme->id);
+
+        $system = [
+            'config' => [
+                'site' => [
+                    'value' => 'Mays'
+                ]
+            ],
+        ];
+
+        if (Auth::check() and isset(request()->edit)) {
+            // Mostrar edicion de pagina
+            //return Inertia::render('My/Cms/Components/Render', $view);
+            return MyAdmin::page($view, 'My/Cms/Components/Render');
+        } else {
+            // Mostrar pagina 
+            return view(
+                'my_cms::view',
+                [
+                    'blocks' => $view->render->blocks,
+                    'data' => $view,
+                    'system' => json_decode(json_encode($system))
+                ]
+            );
+        }
     }
 
     /**
@@ -96,6 +128,59 @@ class PathController extends Controller
      */
     public function edit($data)
     {
+        // dd($data);
+        if (isset($data['id'])) {
+            if ($data['id'] == -1) {
+                $path = new CmsPath();
+                $path->user_id = Auth::user()->id;
+            } else {
+                $path = CmsPath::find($data['id']);
+            }
+            $path->domain = '';
+            $path->alias = $data['alias'];
+            $path->refresh = $data['refresh'];
+            $path->priority = $data['priority'];
+            if ($data['home'] == true or $data['home'] == 1) {
+                $oldHome = CmsPath::where('home', 1)->get();
+                foreach ($oldHome as $old) {
+                    $old->home = 0;
+                    $old->save();
+                }
+
+                $path->index = $data['index'];
+            }
+            $path->home = $data['home'];
+            $path->program_public = $data['program_public'];
+            $path->public_at = Carbon::parse($data['public_at'])->format('Y-m-d H:m');
+            $path->program_disabled = $data['program_disabled'];
+            $path->disabled_at = Carbon::parse($data['disabled_at'])->format('Y-m-d H:m');
+            $path->active = $data['active'];
+            $path->save();
+
+            foreach ($data['langs'] as $lang) {
+                if ($data['id'] == -1) {
+                    $pathLangs = new CmsPathLang();
+                    $pathLangs->user_id = Auth::user()->id;
+                } else {
+                    $pathLangs = CmsPathLang::where('path_id', $path->id)->where('lang', $lang['lang'])->first();
+                    if (!$pathLangs) {
+                        $pathLangs = new CmsPathLang();
+                        $pathLangs->user_id = Auth::user()->id;
+                    }
+                }
+                $pathLangs->path_id = $path->id;
+                $pathLangs->theme_id = $lang['theme_id'];
+                $pathLangs->lang = $lang['lang'];
+                $pathLangs->title = $lang['title'];
+                $pathLangs->path = $lang['path'];
+                $pathLangs->full_path = $lang['full_path'];
+                $pathLangs->active = 1;
+                $pathLangs->save();
+            }
+            $path->langs;
+        }
+
+        return $path;
     }
 
     /**

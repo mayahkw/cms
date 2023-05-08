@@ -1,32 +1,79 @@
 <template>
     <v-row>
-        <v-col cols="12">
+        <v-col cols="6">
             <v-switch
                 :label="block.value.editable ? 'Dinamico' : 'Estatico'"
                 v-model="block.value.editable"
             ></v-switch>
         </v-col>
-        <v-col :cols="block.value.value === null ? 12 : 8">
+
+        <v-col cols="6">
+            <v-btn
+                block
+                color="success"
+                @click="
+                    block.value.value.push({
+                        img: [],
+                        title: '',
+                        description: '',
+                    }),
+                        filesUpload.push({ files: [] })
+                "
+            >
+                Add Img
+            </v-btn>
+        </v-col>
+    </v-row>
+
+    <v-row v-for="(src, i) in filesUpload" :key="i">
+        <v-col cols="8">
             <v-file-input
                 chips
                 counter
+                v-model="src.files"
                 show-size
                 small-chips
                 prepend-icon="mdi-camera"
                 label="Imagen"
                 truncate-length="26"
                 accept="image/*"
-                @update:modelValue="uploadFile"
-            ></v-file-input
-        ></v-col>
-        <v-col v-if="block.value.value !== null" cols="4">
+                @update:modelValue="uploadFile(i)"
+            ></v-file-input>
+            <v-btn variant="flat" color="danger" block @click="deleteImage(i)">
+                Quitar imagen
+            </v-btn>
+        </v-col>
+
+        <v-col
+            v-if="block.value.value[i] && block.value.value[i].img.length > 0"
+            cols="4"
+        >
             <v-img
-                v-for="img in block.value.value"
+                v-for="img in block.value.value[i].img"
                 :key="img.id"
                 :src="'/' + img.dir + '/' + img.name"
             ></v-img>
         </v-col>
+
+        <v-col cols="12" v-if="block.value.value[i]">
+            <v-text-field
+                label="Titulo"
+                v-model="block.value.value[i].title"
+            ></v-text-field>
+        </v-col>
+
+        <v-col cols="12" v-if="block.value.value[i]">
+            <v-textarea
+                label="Descripcion"
+                v-model="block.value.value[i].description"
+            ></v-textarea>
+        </v-col>
+        <v-col cols="12">
+            <v-divider />
+        </v-col>
     </v-row>
+
+    <v-row> </v-row>
 </template>
 
 <script>
@@ -45,7 +92,7 @@ export default {
         block: {
             type: Object,
             default() {
-                return { id: -1, value: null };
+                return { id: -1, value: [] };
             },
         },
     },
@@ -56,26 +103,50 @@ export default {
             progress: 0,
             message: "",
             imageInfos: [],
+            filesUpload: [],
         };
     },
     created() {
+        console.log("this.block.value.value");
+        console.log(this.block.value.value);
+        for (let e = 0; e < this.block.value.value.length; e++) {
+            this.filesUpload.push({ files: [] });
+        }
         if (this.block.value === null) {
-            this.block.value = { value: null, editable: null };
+            this.block.value = { value: [], editable: null };
         }
     },
     watch: {
-        "myAdmin.$state.config.langs": {
+        "block.value": {
             deep: true,
             handler() {
-                // this.langDefault();
+                console.log("this.block.value.value");
+                console.log(this.block.value.value);
+                for (let e = 0; e < this.block.value.value.length; e++) {
+                    //  this.filesUpload.push({ files: [] });
+                    //       this.filesUpload.push({ files: "" });
+                }
             },
         },
     },
     computed: {},
     methods: {
-        async uploadFile(files) {
-            let resultUpload = [];
+        deleteImage(i) {
+            this.filesUpload.splice(i, 1);
+            this.block.value.value.splice(i, 1);
+        },
+
+        async uploadFile(id) {
+            //alert(id);
+            console.log(this.filesUpload[id].files);
+
+            let files = this.filesUpload[id].files;
+
             for (let i = 0; i < files.length; i++) {
+                this.myAdmin.$state.loading.show = true;
+                this.myAdmin.$state.loading.text =
+                    "Guardando " + files.length + "  imagen(es)";
+
                 let data = {
                     id: -1,
                     block: this.block.id,
@@ -98,7 +169,8 @@ export default {
                         this.myAdmin.$state.headersFile
                     )
                     .then((response) => {
-                        resultUpload.push(response.data);
+                        this.myAdmin.$state.loading.show = false;
+                        this.block.value.value[id].img.push(response.data);
                     })
                     .catch((error) => {
                         console.log("error upload file");
@@ -106,7 +178,7 @@ export default {
                     });
             }
 
-            this.block.value.value = resultUpload;
+            //this.block.value.value = resultUpload;
         },
     },
 };

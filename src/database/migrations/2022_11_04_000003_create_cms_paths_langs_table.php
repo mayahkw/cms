@@ -27,7 +27,8 @@ return new class extends Migration
             $table->bigInteger('path_id')->unsigned()->index();
             $table->bigInteger('theme_id')->unsigned()->index();
             $table->string('lang', 5);
-            $table->string('path', 150);
+            $table->string('title', 150)->nullable();
+            $table->string('path', 150)->nullable();
             $table->string('full_path', 200);
             $table->boolean('active')->nullable()->default('1');
             $table->softDeletes();

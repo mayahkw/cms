@@ -56,6 +56,7 @@
                             rounded="circle"
                         ></v-pagination>
                     </v-col>
+                    
                 </v-row>
             </v-col>
 
@@ -158,6 +159,7 @@ export default {
                 options: {
                     class: [],
                     styles: [],
+                    options: [],
                     father: { value: true, limit: null },
                 },
                 operators: null,

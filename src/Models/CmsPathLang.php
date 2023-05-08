@@ -11,14 +11,14 @@ class CmsPathLang extends Model
 
     protected $table = "my_cms_paths_langs";
 
-    public function lang()
+    public function page()
     {
-        return $this->belongsTo(CmsPathLang::class, 'path_lang_id');
+        return $this->belongsTo(CmsPath::class, 'path_id');
     }
 
     public function theme()
     {
-        return $this->belongsTo(CmsTheme::class, 'id', 'lang_id');
+        return $this->belongsTo(CmsTheme::class, 'theme_id');
     }
 
     public function blocks()

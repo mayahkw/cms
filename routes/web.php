@@ -3,12 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 use Mayahkw\CMS\Controllers\PathController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\URL;
 
-// Comprobar si ya se cuenta con la tabla de rutas 
-PathController::index('routes');
 
 
 // Rutas

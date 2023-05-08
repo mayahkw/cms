@@ -4,7 +4,7 @@ Modulo de Gestion de contenido CMS
 
 # Requisitos
 
-- \>= PHP 8.0 
+- \>= PHP 8.0
 - Laravel 9
 
 # Instalación
@@ -31,6 +31,12 @@ Despues de instalado abrir `config/app.php` y agregar el service provider.
 ]
 ```
 
+Agregar dependencias
+
+```dotenv
+npm install --save @ckeditor/ckeditor5-vue @ckeditor/ckeditor5-build-classic
+```
+
 <!--
 Ahora agregue el alias.
 
@@ -44,4 +50,3 @@ Ahora agregue el alias.
 # Configuración
 
 Sólo tienes que eliminar la ruta "/" para que el sistema tome el control de la pagina de inicio
-
